@@ -1,6 +1,5 @@
 import pytz
 import os
-import re
 
 from tzlocal import get_localzone
 from datetime import datetime, timedelta
