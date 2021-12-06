@@ -15,6 +15,9 @@ def action_report(colorizer, activity):
     work = data['work']
     report = defaultdict(lambda: {'sum': timedelta(), 'notes': '', 'weekday': '', 'start_time': None, 'end_time': None})
 
+    #customDailyWorkHours = 8
+    customDailyWorkHours = 6
+    
     total_time = 0
     for item in work:
         if item['name'] == activity and 'end' in item:
@@ -39,7 +42,7 @@ def action_report(colorizer, activity):
         print(details['weekday'], sep, date, sep, start_time, sep, end_time, sep,
               format_time(break_duration,colorizer), sep, format_time(details['sum'],colorizer), sep, details['notes'], sep="")
 
-    should_hours = 8 * len(report.items())
+    should_hours = customDailyWorkHours * len(report.items())
     should_hours_str = str(should_hours) + ':00'
     print()
     print('Based on your current entries, you should have logged ', colorizer.green(should_hours_str), ' ; you instead logged ',
