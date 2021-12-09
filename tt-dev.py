@@ -47,7 +47,7 @@ def parse_args(argv=sys.argv):
         fn = edit.action_edit
         args = {}
 
-    elif head in ['start']:
+    elif head in ['start','-s','begin','-b']:
         if not tail or len(tail) != 2:
             raise BadArguments(
                 'Please provide a name for the activity and the start time, like so:\n$ tt start project 14:15')
@@ -59,15 +59,15 @@ def parse_args(argv=sys.argv):
             'time': to_datetime(' '.join(tail[1:])),
         }
 
-    elif head in ['stop']:
+    elif head in ['stop', 'end', '-e']:
         fn = stop.action_stop
         args = {'colorizer': colorizer, 'time': to_datetime(' '.join(tail))}
 
-    elif head in ['status']:
+    elif head in ['status', '-st']:
         fn = status.action_status
         args = {'colorizer': colorizer}
 
-    elif head in ['log']:
+    elif head in ['log', '-l']:
         fn = log.action_log
         args = {'period': tail[0] if tail else None}
 
@@ -75,27 +75,27 @@ def parse_args(argv=sys.argv):
         fn = csv.action_csv
         args = {}
 
-    elif head in ['report']:
+    elif head in ['report', '-r']:
         fn = report.action_report
         if not tail:
             raise BadArguments('Please provide the name of the activity for which to generate the report')
         args = {'colorizer': colorizer, 'activity': tail[0]}
-        
-    elif head in ['calview']:
+
+    elif head in ['calview', 'cal', '-cal', 'calendar']:
         fn = calview.action_calview
         if not tail:
             raise BadArguments(
                 'Please provide the month [optionally followed by the year] for which to generate the activity report')
         args = {'colorizer': colorizer, 'month': tail[0], 'year': tail[1] if len(tail) > 1 else None}
 
-    elif head in ['tag']:
+    elif head in ['tag', '-t']:
         if not tail:
             raise BadArguments("Please provide at least one tag to add.")
 
         fn = tag.action_tag
         args = {'tags': tail}
 
-    elif head in ['note']:
+    elif head in ['note', '-n']:
         if not tail:
             raise BadArguments("Please provide some text to be noted.")
 
