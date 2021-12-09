@@ -2,10 +2,16 @@ from tt.dateutils.dateutils import *
 
 
 def get_notes_from_workitem(item):
+    notes_delim = ' | '
     notes = ''
     if 'notes' in item:
-        for note in item['notes']:
-            notes += note + ' ; '
+        notes_list = item['notes']
+        # iterate all items in list except last item
+        for note in notes_list[:-1]:
+            notes += note + notes_delim
+        # add last of list
+        for note in notes_list[-1:]:
+            notes += note
     return notes
 
 
@@ -20,5 +26,3 @@ def extract_day(datetime_local_tz):
 
 def remove_seconds(timedelta):
     return ':'.join(str(timedelta).split(':')[:2])
-
-

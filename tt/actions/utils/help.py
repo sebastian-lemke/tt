@@ -54,11 +54,10 @@ def print_help():
     print()
     print('  csv \n'
           '    Description:\n'
-          '      Lists all your individual entries in a comma-separated format, for ease of import into spreadsheet\n'
-          '      editors such as LibreOffice Sheets. The separator is the pipe symbol.\n'
+          '      Lists all your individual entries in a comma-separated format. The separator is the comma symbol.\n'
           '    Examples:\n'
           '      tt csv\n'
-          '      tt csv --nocolor > /tmp/allentries.csv ; libreoffice /tmp/allentries.csv')
+          '      tt csv --nocolor > /tmp/time-entries.csv')
 
     print()
     print('  status \n'

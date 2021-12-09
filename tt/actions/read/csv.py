@@ -6,9 +6,12 @@ from tt.actions.utils import reportingutils
 
 
 def action_csv():
-    sep = '|'
+    delim = ','
     data = get_data_store().load()
     work = data['work']
+
+    #add csv header
+    print('"project-name"',delim,'"duration"',delim,'"start-date"',delim,'"end-date"',delim,'"comments"',sep='')
 
     for item in work:
         if 'end' in item:
@@ -18,16 +21,19 @@ def action_csv():
             date = reportingutils.extract_day(item['start'])
             name = item['name']
             start = format_csv_time(item['start'])
+            # d2t customization
+            start_date = date + ' ' + start
             end = format_csv_time(item['end'])
+            end_date = date + ' ' + end
             tags = ''
             if 'tags' in item:
                 tags = item['tags']
-            print_elements(date, name, start, end, duration_total, notes, tags, sep)
+
+            print_elements(name, duration_total, start_date, end_date, notes, tags, delim)
 
 
-def print_elements(date, name, start, end, total_duration, notes, tags, sep):
-    # print(date, sep, name, sep, start, sep, end, sep, total_duration, sep, tags, sep, notes)
-    print(date, sep, start, sep, end, sep, '', sep, notes, sep, name)
+def print_elements(name, total_duration, start_date, end_date, notes, tags, delim):
+    print(name,delim,total_duration,delim,start_date,delim,end_date,delim,notes,sep='')
 
 
 def format_csv_time(somedatetime):
