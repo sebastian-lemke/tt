@@ -21,7 +21,7 @@ def action_csv():
             date = reportingutils.extract_day(item['start'])
             name = item['name']
             start = format_csv_time(item['start'])
-            # d2t customization
+            # customization
             start_date = date + ' ' + start
             end = format_csv_time(item['end'])
             end_date = date + ' ' + end

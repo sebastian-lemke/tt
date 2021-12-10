@@ -18,12 +18,14 @@ from tt.actions.write import stop
 from tt.actions.write import tag
 from tt.actions.write import note
 
+
 from tt.actions.read import log
 from tt.actions.read import csv
 from tt.actions.read import report
 from tt.actions.read import calview
 from tt.actions.read import status
-
+# d2t
+from tt.actions.read import list
 
 def parse_args(argv=sys.argv):
 
@@ -102,9 +104,14 @@ def parse_args(argv=sys.argv):
         fn = note.action_note
         args = {'colorizer': colorizer, 'content': ' '.join(tail)}
 
+    elif head in ['list', '-ls']:
+        fn = list.action_list
+        if not tail:
+            raise BadArguments('Please provide argument "project" or "tags" to show a list with these information')
+        args = {'projectsOrTags': tail}
+
     else:
         raise BadArguments("I don't understand %r" % (head,))
-
     return fn, args
 
 
