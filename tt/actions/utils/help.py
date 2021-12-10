@@ -88,4 +88,11 @@ def print_help():
           '      tt calview 11 --nocolor\n'
           '      tt calview 10 2030')
     print()
+    print('  list [projects | tags] \n'
+          '    Description:\n'
+          '      Shows a list with all distinct projects or tags, depending on the provided argument.\n'
+          '    Examples:\n'
+          '      tt list projects\n'
+          '      tt list tags')
+    print()
     print('For the full documentation, check out http://github.com/dribnif/tt')
