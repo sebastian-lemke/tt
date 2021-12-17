@@ -53,13 +53,13 @@ def action_calview(colorizer, month, year):
             day_cell_header=""
             if weekdays[day_index] != 0:
                 day_cell_header=" "+ str(year)+"-"+month.zfill(2)+"-"+str(weekdays[day_index]).zfill(2)
-            print(colorizer.blue(day_cell_header.ljust(26, ' ')),  end="|")
+            print(colorizer.yellow(day_cell_header.ljust(26, ' ')),  end="|")
         print()
         print(delimiter)
         print_week_activity(colorizer, weekdays[0:weekEnd],  5,  report,  year,  month)
         #print("WEEK DONE")
         print(delimiter)
-        
+
 
 def print_week_activity(colorizer, current_week,  height_in_rows,  report,  year,  month):
    for curr_row in range(height_in_rows):
@@ -67,7 +67,7 @@ def print_week_activity(colorizer, current_week,  height_in_rows,  report,  year
        print("") #one week row done
 
 def print_activity_at_index(colorizer, curr_row,  current_week,  report,  year,  month):
-    print("",  end="|")    
+    print("",  end="|")
     for day_index in range(len(current_week)):
         if current_week[day_index] == 0:
             print("".rjust(26, ' '),  end="|")
@@ -112,4 +112,3 @@ def format_time_seconds(duration_secs ):
     mins, secs = divmod(rem, 60)
     formatted_time_str = str(hours).rjust(2, str('0')) + ':' + str(mins).rjust(2, str('0'))
     return formatted_time_str
-    
