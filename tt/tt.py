@@ -2,6 +2,7 @@
 from __future__ import print_function
 
 import sys
+from datetime import date
 
 from tt.colors.colors import Colorizer
 
@@ -85,9 +86,12 @@ def parse_args(argv=sys.argv):
 
     elif head in ['calview', 'cal', '-cal', 'calendar']:
         fn = calview.action_calview
+        # added default: if no month is provided by user, use current month
+        current_month = date.today().strftime("%m")
         if not tail:
-            raise BadArguments(
-                'Please provide the month [optionally followed by the year] for which to generate the activity report')
+            #raise BadArguments(
+            #    'Please provide the month [optionally followed by the year] for which to generate the activity report')
+            tail = [current_month]
         args = {'colorizer': colorizer, 'month': tail[0], 'year': tail[1] if len(tail) > 1 else None}
 
     elif head in ['tag', '-t']:
