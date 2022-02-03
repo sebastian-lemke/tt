@@ -50,11 +50,10 @@ def parse_args(argv=sys.argv):
         fn = edit.action_edit
         args = {}
 
-    elif head in ['start','-s','begin','-b']:
+    elif head in ['start','-s', 'begin','-b']:
         if not tail or len(tail) != 2:
             raise BadArguments(
                 'Please provide a name for the activity and the start time, like so:\n$ tt start project 14:15')
-
         fn = start.action_start
         args = {
             'colorizer': colorizer,
@@ -66,7 +65,7 @@ def parse_args(argv=sys.argv):
         fn = stop.action_stop
         args = {'colorizer': colorizer, 'time': to_datetime(' '.join(tail))}
 
-    elif head in ['status', '-st']:
+    elif head in ['status', 'stat', '-st', 'what']:
         fn = status.action_status
         args = {'colorizer': colorizer}
 
@@ -78,7 +77,7 @@ def parse_args(argv=sys.argv):
         fn = csv.action_csv
         args = {}
 
-    elif head in ['report', '-r']:
+    elif head in ['report', 'rp' '-r']:
         fn = report.action_report
         if not tail:
             raise BadArguments('Please provide the name of the activity for which to generate the report')
@@ -86,7 +85,7 @@ def parse_args(argv=sys.argv):
 
     elif head in ['calview', 'cal', '-cal', 'calendar']:
         fn = calview.action_calview
-        # added default: if no month is provided by user, use current month
+        # added default current_month: if no month is provided by user, use current month
         current_month = date.today().strftime("%m")
         if not tail:
             #raise BadArguments(
@@ -101,14 +100,14 @@ def parse_args(argv=sys.argv):
         fn = tag.action_tag
         args = {'tags': tail}
 
-    elif head in ['note', '-n']:
+    elif head in ['note', 'nt', '-n']:
         if not tail:
             raise BadArguments("Please provide some text to be noted.")
 
         fn = note.action_note
         args = {'colorizer': colorizer, 'content': ' '.join(tail)}
 
-    elif head in ['list', '-ls']:
+    elif head in ['list', 'ls', '-ls']:
         fn = list.action_list
         if not tail:
             raise BadArguments('Please provide argument "project" or "tags" to show a list with these information')
