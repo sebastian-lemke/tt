@@ -17,7 +17,9 @@ def action_report(colorizer, activity):
 
     #customDailyWorkHours = 8
     customDailyWorkHours = 6
-    
+    showEstimatedGoalWorkHours = False
+    showReportWithBreak = False
+
     total_time = 0
     for item in work:
         if item['name'] == activity and 'end' in item:
@@ -26,27 +28,45 @@ def action_report(colorizer, activity):
             day = reportingutils.extract_day(item['start'])
             duration = parse_isotime(item['end']) - parse_isotime(item['start'])
             report[day]['sum'] += duration
-            report[day]['notes'] += reportingutils.get_notes_from_workitem(item)
+
+            # added notes_delim
+            notes_delim = ' | '
+            if len(report[day]['notes'])==0:
+                report[day]['notes'] += reportingutils.get_notes_from_workitem(item)
+            else:
+                report[day]['notes'] += (notes_delim + reportingutils.get_notes_from_workitem(item))
+
             report[day]['weekday'] = reportingutils.extract_day_custom_formatter(item['start'], '%a')
             report[day]['start_time'] = get_min_date(report[day]['start_time'], start_time)
             report[day]['end_time'] = get_max_date(report[day]['end_time'], end_time)
             total_time += duration.seconds
 
-    print('weekday', sep, 'date', sep, 'total duration', sep, 'start time', sep, 'end time', sep, 'break', sep,
-          'description', sep)
+    if showReportWithBreak is True:
+        print('weekday', sep, 'date', sep, 'start time', sep, 'end time',
+                sep, 'break', sep, 'total duration', sep, 'description', sep)
+    else:
+        print('weekday', sep, 'date', sep, 'start time', sep, 'end time',
+                sep, 'total duration', sep, 'description', sep)
 
     for date, details in sorted(report.items()):
         start_time = utc_to_local(details['start_time']).strftime("%H:%M")
         end_time = utc_to_local(details['end_time']).strftime("%H:%M")
         break_duration = get_break_duration(details['start_time'], details['end_time'], details['sum'])
-        print(details['weekday'], sep, date, sep, start_time, sep, end_time, sep,
-              format_time(break_duration,colorizer), sep, format_time(details['sum'],colorizer), sep, details['notes'], sep="")
+        if showReportWithBreak is True:
+            print(details['weekday'], sep, date, sep, start_time, sep, end_time, sep,
+                  format_time(break_duration,colorizer), sep, format_time(details['sum'],colorizer), sep, details['notes'], sep="")
+        else:
+            print(details['weekday'], sep, date, sep, start_time, sep, end_time, sep,
+                  format_time(details['sum'],colorizer), sep, details['notes'], sep="")
 
-    should_hours = customDailyWorkHours * len(report.items())
-    should_hours_str = str(should_hours) + ':00'
     print()
-    print('Based on your current entries, you should have logged ', colorizer.green(should_hours_str), ' ; you instead logged ',
-          format_time_seconds(total_time,colorizer), sep='')
+
+    if showEstimatedGoalWorkHours is True:
+        should_hours = customDailyWorkHours * len(report.items())
+        should_hours_str = str(should_hours) + ':00'
+        print('Based on your current entries, you should have logged ', colorizer.green(should_hours_str), ' ; you instead logged ',
+              format_time_seconds(total_time,colorizer), sep='')
+        print()
 
 
 def get_break_duration(start_time, end_time, net_work_duration):
