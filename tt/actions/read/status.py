@@ -25,4 +25,5 @@ def action_status(colorizer):
 
     if 'notes' in current:
         for note in current['notes']:
-            print('  * ', note)
+            #print('  * ', note)
+            print('  - ', note)
