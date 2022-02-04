@@ -115,7 +115,7 @@ def parse_args(argv=sys.argv):
     elif head in ['list', 'ls', '-ls']:
         fn = list.action_list
         if not tail:
-            raise BadArguments('Please provide argument "project" or "tags" to show a list with these information')
+            raise BadArguments('Please provide argument "projects" or "tags" to show a list with these information')
         args = {'projectsOrTags': tail}
 
     else:
