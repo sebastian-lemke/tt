@@ -50,6 +50,11 @@ def get_current_day():
 def get_now():
     return datetime.now()
 
+def get_today_date():
+    now = get_now()
+    today =  now.strftime("%Y-%m-%d")
+    return today
+
 
 def parse_time_multiformat(timestr):
     if timestr == "now":
@@ -72,7 +77,7 @@ def get_current_year_local_tz():
 
 def parse_time_h_m_to_iso(timestr):
     now = datetime.utcnow()
-    
+
     try:
         settime = parse_time_multiformat(timestr)
         x = now.replace(hour=settime.hour, minute=settime.minute, second=0, microsecond=1)

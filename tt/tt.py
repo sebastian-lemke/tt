@@ -23,6 +23,7 @@ from tt.actions.write import note
 from tt.actions.read import log
 from tt.actions.read import csv
 from tt.actions.read import report
+from tt.actions.read import today
 from tt.actions.read import calview
 from tt.actions.read import status
 # d2t
@@ -82,6 +83,10 @@ def parse_args(argv=sys.argv):
         if not tail:
             raise BadArguments('Please provide the name of the activity for which to generate the report')
         args = {'colorizer': colorizer, 'activity': tail[0]}
+
+    elif head in ['today', 'now']:
+        fn = today.action_today
+        args = {'colorizer': colorizer}
 
     elif head in ['calview', 'cal', '-cal', 'calendar']:
         fn = calview.action_calview
