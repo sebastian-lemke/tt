@@ -24,7 +24,7 @@ def action_today(colorizer):
     for item in work:
         day = reportingutils.extract_day(item['start'])
 
-        if day == today:
+        if day == today and 'end' in item:
             activity = item['name']
             weekday = reportingutils.extract_day_custom_formatter(item['start'], '%a')
             start_time = parse_isotime(item['start'])
@@ -44,12 +44,19 @@ def action_today(colorizer):
 
             print(weekday, sep, day, sep, activity, sep, start_time_local, sep, end_time_local, sep, duration_local, sep, notes, sep="")
 
-    print()
+    print('---')
     for date, details in sorted(report.items()):
             start_time = utc_to_local(details['start_time']).strftime("%H:%M")
             end_time = utc_to_local(details['end_time']).strftime("%H:%M")
             break_duration = get_break_duration(details['start_time'], details['end_time'], details['sum'])
             print('total duration: ', format_time(details['sum'],colorizer))
+
+    print()
+    for item in work:
+        day = reportingutils.extract_day(item['start'])
+
+        if day == today and not 'end' in item:
+            print('call here tt status')
 
 
 def get_break_duration(start_time, end_time, net_work_duration):
