@@ -3,7 +3,7 @@ import os
 import re
 
 from tzlocal import get_localzone
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from tt.exceptz.exceptz import TIError
 
 
@@ -30,6 +30,17 @@ def parse_isotime(isotime_str):
 def to_datetime(timestr):
     return parse_time_h_m_to_iso(timestr).isoformat() + 'Z'
 
+def to_date(datestr):
+    year = date.fromisoformat(datestr).year
+    month = date.fromisoformat(datestr).month
+    day = date.fromisoformat(datestr).day
+    hour = datetime(year, month, day).hour
+    minute = datetime(year, month, day).minute
+    second = datetime(year, month, day).second
+    microsecond = datetime(year, month, day).microsecond
+    # SOLL 2022-12-19T00:00:00.000001Z
+    # IST 2022-12-19T00:00:00.000000Z
+    return datetime(year, month, day,minute,second,microsecond).isoformat('T',timespec='microseconds') + 'Z'
 
 def local_to_utc(local_dt):
     local_dt_dst = get_local_timezone().localize(local_dt)

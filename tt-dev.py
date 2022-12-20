@@ -86,7 +86,7 @@ def parse_args(argv=sys.argv):
 
     elif head in ['day', '-d', 'today']:
         fn = day.action_day
-        args = {'colorizer': colorizer}
+        args = {'colorizer': colorizer, 'date': tail[0] if len(tail) > 0 else None}
 
     elif head in ['calview', 'cal', '-cal', 'calendar']:
         fn = calview.action_calview
