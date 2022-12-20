@@ -2,26 +2,27 @@ from __future__ import print_function
 
 from collections import defaultdict
 
-from tt.dateutils.dateutils import *
-from tt.dataaccess.utils import get_data_store
-from tt.actions.utils import reportingutils
-
 from tt.actions.read import status
+from tt.actions.utils import reportingutils
 from tt.colors.colors import Colorizer
+from tt.dataaccess.utils import get_data_store
+from tt.dateutils.dateutils import *
 
-def action_today(colorizer):
+
+def action_day(colorizer):
     # Display all entries of today...
     # ... first all entries which has been done (with 'end' entry)...
-    print('Displaying all entries for today:', sep='')
+    print('Displaying all entries for day:', sep='')
     print()
     sep = ' | '
-    
+
     data = get_data_store().load()
     work = data['work']
     report = defaultdict(lambda: {'sum': timedelta(), 'notes': '', 'weekday': '', 'start_time': None, 'end_time': None})
     today = get_today_date()
 
-    print('weekday', sep, 'date', sep, 'activity', sep, 'start time', sep, 'end time', sep, 'duration', sep, 'description', sep)
+    print('weekday', sep, 'date', sep, 'activity', sep, 'start time', sep, 'end time', sep, 'duration', sep,
+          'description', sep)
     for item in work:
         day = reportingutils.extract_day(item['start'])
 
@@ -32,24 +33,25 @@ def action_today(colorizer):
             end_time = parse_isotime(item['end'])
             duration = parse_isotime(item['end']) - parse_isotime(item['start'])
             report[day]['sum'] += duration
-            # added notes_delim
+            # added notes_delimiter
             notes = reportingutils.get_notes_from_workitem(item)
             report[day]['start_time'] = get_min_date(report[day]['start_time'], start_time)
             report[day]['end_time'] = get_max_date(report[day]['end_time'], end_time)
             report[day]['weekday'] = reportingutils.extract_day_custom_formatter(item['start'], '%a')
-            # locl time
+            # local time
             start_time_local = utc_to_local(start_time).strftime("%H:%M")
             end_time_local = utc_to_local(end_time).strftime("%H:%M")
-            duration_local = format_time(duration,colorizer)
+            duration_local = format_time(duration, colorizer)
 
-            print(weekday, sep, day, sep, activity, sep, start_time_local, sep, end_time_local, sep, duration_local, sep, notes, sep="")
+            print(weekday, sep, day, sep, activity, sep, start_time_local, sep, end_time_local, sep, duration_local,
+                  sep, notes, sep="")
 
     print('---')
     for date, details in sorted(report.items()):
-            start_time = utc_to_local(details['start_time']).strftime("%H:%M")
-            end_time = utc_to_local(details['end_time']).strftime("%H:%M")
-            break_duration = get_break_duration(details['start_time'], details['end_time'], details['sum'])
-            print('total duration: ', format_time(details['sum'],colorizer))
+        start_time = utc_to_local(details['start_time']).strftime("%H:%M")
+        end_time = utc_to_local(details['end_time']).strftime("%H:%M")
+        break_duration = get_break_duration(details['start_time'], details['end_time'], details['sum'])
+        print('total duration: ', format_time(details['sum'], colorizer))
 
     #  ...Display secondly the current working entry (no 'end' in entry)
     print()
