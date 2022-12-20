@@ -11,6 +11,7 @@ def print_help():
     print()
     print('Commands: ')
     print('  start [WORK_PACKAGE] [STARTING_TIME] \n'
+          '    Alternatives: -s [WORK_PACKAGE] [STARTING_TIME] | begin [WORK_PACKAGE] [STARTING_TIME]\n' 
           '    Description:\n'
           '      Opens a new work package with the supplied name, starting at the supplied time\n'
           '    Examples:\n'
@@ -19,6 +20,7 @@ def print_help():
           '      tt start cleaning now')
     print()
     print('  stop [END_TIME]\n'
+          '    Alternatives: -e [END_TIME] | end [END_TIME]\n' 
           '    Description:\n'
           '      Closes an open work package at the supplied time\n'
           '    Examples:\n'
@@ -27,6 +29,7 @@ def print_help():
           '      tt stop now')
     print()
     print('  note [TEXT]\n'
+          '    Alternatives: -n [TEXT] | nt [TEXT]\n' 
           '    Description:\n'
           '      Adds a note to an open work package\n'
           '    Examples:\n'
@@ -60,7 +63,8 @@ def print_help():
           '      tt csv --nocolor > /tmp/time-entries.csv')
 
     print()
-    print('  status \n'
+    print('  status \n'     
+          '    Alternatives: -st | stat | what \n'
           '    Description:\n'
           '      Shows all information pertaining to an open work package or an appropriate message, if one cannot\n'
           '      be found. \n'
@@ -69,6 +73,7 @@ def print_help():
           '      tt status --nocolor')
     print()
     print('  report [WORK_PACKAGE] \n'
+          '    Alternatives: -r [WORK_PACKAGE] | rp [WORK_PACKAGE] \n' 
           '    Description:\n'
           '      Creates an aggregated daily report for the work package you specify as parameter. It creates one\n'
           '      aggregated entry per day, based on the entire database content. If you need to restrict the report\n'
@@ -80,15 +85,28 @@ def print_help():
           '      tt report cleaning --nocolor | grep 2019-03 ')
     print()
     print('  calview [MONTH] [YEAR] \n'
+          '    Alternatives: -c [MONTH] [YEAR] | cal  [MONTH] [YEAR]  \n'
           '    Description:\n'
           '      Renders a monthly workday calendar (Monday-Friday) with daily aggregated package durations.\n'
+          '      The [MONTH] parameter is optional; if omitted, it defaults to the current month. \n'
           '      The [YEAR] parameter is optional; if omitted, it defaults to the current year. \n'
           '    Examples:\n'
+          '      tt calview\n'
+          '      tt cal\n'
+          '      tt -c\n'
           '      tt calview 12\n'
           '      tt calview 11 --nocolor\n'
           '      tt calview 10 2030')
     print()
+    print('  day \n'
+          '    Alternatives: -d | today \n'
+          '    Description:\n'
+          '      Shows current workday with time entries \n'
+          '    Examples:\n'
+          '      tt day')
+    print()
     print('  list [projects | tags] \n'
+          '    Alternatives: -ls \n'
           '    Description:\n'
           '      Shows a list with all distinct projects or tags, depending on the provided argument.\n'
           '    Examples:\n'
