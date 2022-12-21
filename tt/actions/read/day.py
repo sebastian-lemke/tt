@@ -7,32 +7,47 @@ from tt.actions.utils import reportingutils
 from tt.colors.colors import Colorizer
 from tt.dataaccess.utils import get_data_store
 from tt.dateutils.dateutils import *
+from datetime import datetime, timedelta, date
 
 
 def action_day(colorizer, date):
     # Display all entries of today...
     # ... first all entries which has been done (with 'end' entry)...
-    print('Displaying all entries for day:', sep='')
-    print()
-    sep = ' | '
+
+
+    sep = '|'
+    sep2 = ' | '
 
     data = get_data_store().load()
     work = data['work']
     report = defaultdict(lambda: {'sum': timedelta(), 'notes': '', 'weekday': '', 'start_time': None, 'end_time': None})
 
-    # today for current workday display
-    today = get_today_date()
     # date parameter for selecting specific date
-
     if date is None:
+        # today for current workday display
         date = get_today_date()
+    elif len(date) < 3:
+        # assuming that if date is less then 3, then it is a timedelta in days
+        today_date = to_datetime_obj(get_today_date())
+        calc_date = today_date.__add__(timedelta(int(date)))
+        date = reportingutils.extract_day(to_date(calc_date))
     else:
-        date = reportingutils.extract_day(to_date(date))
+        # assuming YYYY-MM-DD string
+        date_from_param = to_date(to_datetime_obj(date))
+        date = reportingutils.extract_day(date_from_param)
 
 
+    if date == get_today_date():
+        print('Displaying all entries for TODAY: ', sep='')
+    else:
+        print('Displaying all entries for day: ', date, sep='')
+    print()
 
-    print('weekday', sep, 'date', sep, 'activity', sep, 'start time', sep, 'end time', sep, 'duration', sep,
-          'description', sep)
+
+    print('day', sep, 'date', sep, 'activity', sep, 'start', sep, ' end ', sep, 'duration', sep, 'description')
+    # print('Day |    Date    | Prj | Start |  End  | Time  | Description')
+    print('-' * 64)
+
     for item in work:
         workday = reportingutils.extract_day(item['start'])
 
@@ -53,9 +68,8 @@ def action_day(colorizer, date):
             end_time_local = utc_to_local(end_time).strftime("%H:%M")
             duration_local = format_time(duration, colorizer)
 
-            print(weekday, sep, workday, sep, activity, sep, start_time_local, sep, end_time_local, sep, duration_local,
-                  sep, notes, sep="")
-
+            print(weekday, sep2, workday, sep2, activity, sep2, start_time_local, sep2, end_time_local, sep2, duration_local,
+                  sep2, notes, sep="")
     print('---')
     for date, details in sorted(report.items()):
         # start_time = utc_to_local(details['start_time']).strftime("%H:%M")
@@ -68,7 +82,7 @@ def action_day(colorizer, date):
     for item in work:
         day = reportingutils.extract_day(item['start'])
         colorizer = Colorizer(True)
-        if day == today and not 'end' in item:
+        if day == get_today_date() and not 'end' in item:
             status.action_status(colorizer)
 
 

@@ -30,7 +30,7 @@ def parse_isotime(isotime_str):
 def to_datetime(timestr):
     return parse_time_h_m_to_iso(timestr).isoformat() + 'Z'
 
-def to_date(datestr):
+def to_datetime_obj(datestr):
     year = date.fromisoformat(datestr).year
     month = date.fromisoformat(datestr).month
     day = date.fromisoformat(datestr).day
@@ -40,7 +40,14 @@ def to_date(datestr):
     microsecond = datetime(year, month, day).microsecond
     # SOLL 2022-12-19T00:00:00.000001Z
     # IST 2022-12-19T00:00:00.000000Z
-    return datetime(year, month, day,minute,second,microsecond).isoformat('T',timespec='microseconds') + 'Z'
+    return datetime(year, month, day,minute,second,microsecond)
+
+def to_date(datetime_obj):
+    # SOLL 2022-12-19T00:00:00.000001Z
+    # IST 2022-12-19T00:00:00.000000Z
+    return datetime_obj.isoformat('T',timespec='microseconds') + 'Z'
+
+
 
 def local_to_utc(local_dt):
     local_dt_dst = get_local_timezone().localize(local_dt)
