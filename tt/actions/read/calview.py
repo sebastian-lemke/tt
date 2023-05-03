@@ -57,7 +57,7 @@ def action_calview(colorizer, month, year):
             if weekdays[day_index] != 0:
                 day_cell_header_iso_date = " " + str(year)+"-"+month.zfill(2)+"-"+str(weekdays[day_index]).zfill(2)
                 day_cell_header_total_work = get_day_total_work_time(report, year, month, weekdays[day_index]) + " "
-            print(colorizer.blue(day_cell_header_iso_date) + colorizer.grey(day_cell_header_total_work),  end="|")
+            print(colorizer.yellow(day_cell_header_iso_date) + colorizer.cyan(day_cell_header_total_work),  end="|")
         print()
         print(delimiter)
         print_week_activity(colorizer, weekdays[0:weekEnd],  5,  report,  year,  month)
