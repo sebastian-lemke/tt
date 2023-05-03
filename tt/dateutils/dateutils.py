@@ -3,7 +3,7 @@ import os
 import re
 
 from tzlocal import get_localzone
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from tt.exceptz.exceptz import TIError
 
 
@@ -30,6 +30,24 @@ def parse_isotime(isotime_str):
 def to_datetime(timestr):
     return parse_time_h_m_to_iso(timestr).isoformat() + 'Z'
 
+def to_datetime_obj(datestr):
+    year = date.fromisoformat(datestr).year
+    month = date.fromisoformat(datestr).month
+    day = date.fromisoformat(datestr).day
+    hour = datetime(year, month, day).hour
+    minute = datetime(year, month, day).minute
+    second = datetime(year, month, day).second
+    microsecond = datetime(year, month, day).microsecond
+    # SOLL 2022-12-19T00:00:00.000001Z
+    # IST 2022-12-19T00:00:00.000000Z
+    return datetime(year, month, day,minute,second,microsecond)
+
+def to_date(datetime_obj):
+    # SOLL 2022-12-19T00:00:00.000001Z
+    # IST 2022-12-19T00:00:00.000000Z
+    return datetime_obj.isoformat('T',timespec='microseconds') + 'Z'
+
+
 
 def local_to_utc(local_dt):
     local_dt_dst = get_local_timezone().localize(local_dt)
@@ -49,6 +67,11 @@ def get_current_day():
 
 def get_now():
     return datetime.now()
+
+def get_today_date():
+    now = get_now()
+    today =  now.strftime("%Y-%m-%d")
+    return today
 
 
 def parse_time_multiformat(timestr):
@@ -71,8 +94,8 @@ def get_current_year_local_tz():
 
 
 def parse_time_h_m_to_iso(timestr):
-    now = get_now()
-    
+    now = datetime.utcnow()
+
     try:
         settime = parse_time_multiformat(timestr)
         x = now.replace(hour=settime.hour, minute=settime.minute, second=0, microsecond=1)
