@@ -69,14 +69,14 @@ def action_day(colorizer, date):
             duration_local = format_time(duration, colorizer)
 
             print(weekday, sep2, workday, sep2, activity, sep2, start_time_local, sep2, end_time_local, sep2, duration_local,
-                  sep2, notes, sep="")
-    print('---')
+                  sep2, notes, sep="")    
+    print('-' * 64)
     for date, details in sorted(report.items()):
+        weekday = reportingutils.extract_day_custom_formatter(item['start'], '%a')
         # start_time = utc_to_local(details['start_time']).strftime("%H:%M")
         # end_time = utc_to_local(details['end_time']).strftime("%H:%M")
         # break_duration = get_break_duration(details['start_time'], details['end_time'], details['sum'])
-        print(date,'Total working time: ', format_time(details['sum'], colorizer))
-
+        print(weekday,'|', date, '| Total working time: \u03A3', format_time(details['sum'], colorizer))
     #  ...Display secondly the current working entry (no 'end' in entry)
     print()
     for item in work:
@@ -102,8 +102,8 @@ def format_time_seconds(duration_secs, colorizer):
     if hours >= 8:
         return colorizer.green(formatted_time_str)
     else:
-        return colorizer.red(formatted_time_str)
-
+        # return colorizer.red(formatted_time_str)
+        return colorizer.green(formatted_time_str)
 
 def get_min_date(date_1, date_2):
     if date_1 is None:
@@ -115,3 +115,4 @@ def get_max_date(date_1, date_2):
     if date_1 is None:
         date_1 = parse_isotime('2015-01-01T00:00:00.000001Z')
     return date_1 if date_1 > date_2 else date_2
+
