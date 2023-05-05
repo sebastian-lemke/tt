@@ -68,6 +68,9 @@ def get_current_day():
 def get_now():
     return datetime.now()
 
+def get_now_ceil15min():
+    return ceil(datetime.now())
+
 def get_today_date():
     now = get_now()
     today =  now.strftime("%Y-%m-%d")
@@ -75,8 +78,10 @@ def get_today_date():
 
 
 def parse_time_multiformat(timestr):
+    # if timestr == "now":
+        # return get_now()
     if timestr == "now":
-        return get_now()
+        return get_now_ceil15min()
     for time_format in ["%H:%M", "%H%M"]:
         try:
             settime = datetime.strptime(timestr, time_format)
@@ -135,3 +140,21 @@ def timegap(start_time, end_time):
         return 'about {} months'.format(mins // 43200)
     else:
         return 'more than a year'
+
+
+def ceil(dt):
+    minutes = int(dt.strftime('%M'))*60
+    seconds = int(dt.strftime('%S'))
+    h = int(dt.strftime('%H'))
+    total = minutes + seconds
+    #print(tot)
+    nearest = round(total/900)*900
+    #print('time is %d:%d'%(total/60, total%60), 'nearest fifteen mark is %d:%d'%(nearest/60, nearest%60))
+    if nearest/60 == 60 and h < 23:
+        nr_15_mark = dt.replace(hour=h+1, minute=0, second=0)
+    elif nearest/60 == 60 and h == 23:
+        #wrapping the hour back to 0 
+        nr_15_mark = dt.replace(hour=0, minute=0, second=0)
+    else:
+        nr_15_mark = dt.replace(minute=int(nearest/60), second=nearest%60)
+    return nr_15_mark
