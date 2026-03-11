@@ -1,0 +1,17 @@
+# Core requirements for the tt application
+# Note: Many of tt's dependencies are Python standard libraries (sys, os, datetime)
+# which do not need to be listed here.
+
+# Likely external dependencies:
+colorama>=0.4.4    # For colored terminal output
+python-dateutil>=2.8.2  # For easier date parsing/handling
+tabulate>=0.8.9    # For formatting the output tables
+pyyaml
+tzlocal==2.1
+pytz
+mock
+lark-parser
+pyinstaller
+
+# Required for building the EXE
+pyinstaller>=5.0.0
