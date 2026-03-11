@@ -158,3 +158,30 @@ def ceil(dt):
     else:
         nr_15_mark = dt.replace(minute=int(nearest/60), second=nearest%60)
     return nr_15_mark
+
+
+
+# d2t
+def parse_duration_to_timedelta(duration_str):
+    """
+    Parses strings like '2h', '30m', '1h30m', '1.5h' into a timedelta object.
+    """
+    regex = re.compile(r'((?P<hours>\d?\.?\d+)h)?((?P<minutes>\d?\.?\d+)m)?')
+    parts = regex.match(duration_str)
+    if not parts:
+        raise TIError(f"Could not parse duration: {duration_str}")
+    
+    params = {name: float(param) for name, param in parts.groupdict().items() if param}
+    if not params:
+        raise TIError(f"Invalid duration format. Use e.g., '2h' or '30m'")
+        
+    return timedelta(**params)
+
+def get_past_datetime_iso(duration_str):
+    """
+    Returns an ISO timestamp for (Now - Duration).
+    """
+    delta = parse_duration_to_timedelta(duration_str)
+    # Using your existing local_to_utc logic to stay consistent
+    past_local = datetime.now() - delta
+    return local_to_utc(past_local).isoformat() + 'Z'

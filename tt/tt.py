@@ -18,7 +18,8 @@ from tt.actions.write import start
 from tt.actions.write import stop
 from tt.actions.write import tag
 from tt.actions.write import note
-
+# d2t
+from tt.actions.write import duration
 
 from tt.actions.read import log
 from tt.actions.read import csv
@@ -28,6 +29,7 @@ from tt.actions.read import calview
 from tt.actions.read import status
 # d2t
 from tt.actions.read import list
+
 
 def parse_args(argv=sys.argv):
 
@@ -65,6 +67,20 @@ def parse_args(argv=sys.argv):
     elif head in ['stop', 'end', '-e', '-x', '!']:
         fn = stop.action_stop
         args = {'colorizer': colorizer, 'time': to_datetime(' '.join(tail))}
+
+    elif head in ['duration', 'dur', 'add', '-a']:
+        if not tail or len(tail) < 3:
+            raise BadArguments(
+                'Usage: tt duration <project> <duration> <notes...>\n'
+                'Example: tt duration website 1.5h fixed navigation CSS')
+        
+        fn = duration.action_duration
+        args = {
+            'colorizer': colorizer,
+            'name': tail[0],
+            'time_input': tail[1],   # e.g., "2h"
+            'content': ' '.join(tail[2:]) # e.g., "fixed bugs"
+        }
 
     elif head in ['status', 'stat', '-st', 'what']:
         fn = status.action_status
