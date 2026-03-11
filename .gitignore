@@ -43,3 +43,4 @@ venv/
 #eric project files
 .eric6project/
 *.e4p
+timeEntries/tt-timeEntries.json
