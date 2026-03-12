@@ -163,15 +163,18 @@ def ceil(dt):
 
 # d2t
 def parse_duration_to_timedelta(duration_str):
-    """
-    Parses strings like '2h', '30m', '1h30m', '1.5h' into a timedelta object.
-    """
-    regex = re.compile(r'((?P<hours>\d?\.?\d+)h)?((?P<minutes>\d?\.?\d+)m)?')
+    # 1. Added ^ and $ to ensure the WHOLE string is a duration
+    # 2. Refined the digit pattern to be more strict
+    regex = re.compile(r'^((?P<hours>\d+(?:\.\d+)?)h)?((?P<minutes>\d+(?:\.\d+)?)(?:m|min)?)?$')    
     parts = regex.match(duration_str)
-    if not parts:
+    
+    # If the string was "30min test", .match() with anchors will now 
+    # correctly fail or we can use .search() if the duration is hidden inside
+    if not parts or not parts.group(0):
         raise TIError(f"Could not parse duration: {duration_str}")
     
     params = {name: float(param) for name, param in parts.groupdict().items() if param}
+    
     if not params:
         raise TIError(f"Invalid duration format. Use e.g., '2h' or '30m'")
         
@@ -182,6 +185,12 @@ def get_past_datetime_iso(duration_str):
     Returns an ISO timestamp for (Now - Duration).
     """
     delta = parse_duration_to_timedelta(duration_str)
+    
+    
     # Using your existing local_to_utc logic to stay consistent
     past_local = datetime.now() - delta
-    return local_to_utc(past_local).isoformat() + 'Z'
+    past_local_iso = local_to_utc(past_local).isoformat() + 'Z'
+    print(f"DEBUG: Berechnetes Delta für '{duration_str}' ist: {delta}")
+
+
+    return past_local_iso
