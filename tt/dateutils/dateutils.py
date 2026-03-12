@@ -188,7 +188,7 @@ def get_past_datetime_iso(duration_str):
     
     
     # Using your existing local_to_utc logic to stay consistent
-    past_local = datetime.now() - delta
+    past_local = get_now_ceil15min() - delta
     past_local_iso = local_to_utc(past_local).isoformat() + 'Z'
     print(f"DEBUG: Berechnetes Delta für '{duration_str}' ist: {delta}")
 
